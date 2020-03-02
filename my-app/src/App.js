@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Image, StyleSheet, Text, View, TextInput} from "react-native";
+import { Button, Image, StyleSheet, Text, View, TextInput, ActivityIndicator} from "react-native";
 import queryString from 'query-string';
 import ViewMoreText from 'react-native-view-more-text';
 
@@ -18,7 +18,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {url: '', n: 100, article: ''};
+    this.state = {url: '', n: 100, article: '', show_load: false};
   }
 
   handleSubmit = event =>{
@@ -101,7 +101,10 @@ class App extends Component {
             this link
           </Link>{" "}
         </Text>
-        <Button onPress={() => {}} title="Example button" />
+
+        <Button onPress={() => {}} title="Click here to Train!" />
+        <View></View>
+        <ActivityIndicator animating={this.state.show_load} size="large" color="#0000ff" />
       </View>
     );
   }
