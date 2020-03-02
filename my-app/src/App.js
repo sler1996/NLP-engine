@@ -18,7 +18,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {url: '', n: 100, article: '', show_load: false};
+    this.state = {url: '', n: 100, word: '', article: '', tenwords: '', show_load: false};
   }
 
   handleSubmit = event =>{
@@ -37,6 +37,40 @@ class App extends Component {
             .catch(error => console.error('Error:', error))
     .then(function(response){
       that.setState({article: response.article})
+    }); 
+  }
+
+  handleTrain = event =>{
+    event.preventDefault();
+    const that = this
+    that.show_load = true
+    const url = 'http://localhost:5000/train'
+    fetch(url, { 
+      method: 'POST', 
+      })
+    .then(res => res.json())
+            .catch(error => console.error('Error:', error)); 
+    that.show_load = false
+  }
+
+  handleSubmit2 = event =>{
+    event.preventDefault();
+    const that = this
+    const data = {word:this.state.word}
+    const url = 'http://localhost:5000/words'
+    fetch(url, { 
+      method: 'POST', 
+      body: queryString.stringify(data),
+      headers: {
+        'Content-Type':'application/x-www-form-urlencoded'
+      }, 
+      })
+    .then(res => res.json())
+            .catch(error => console.error('Error:', error))
+    .then(function(response){
+      console.log(response.words)
+      const words = response.words.join()
+      that.setState({tenwords: words})
     }); 
   }
 
@@ -102,10 +136,28 @@ class App extends Component {
           </Link>{" "}
         </Text>
 
-        <Button onPress={() => {}} title="Click here to Train!" />
+        <Button onPress={this.handleTrain} title="Click here to Train!" />
         <View></View>
         <ActivityIndicator animating={this.state.show_load} size="large" color="#0000ff" />
+        
+        <View style={{display: 'flex', flexDirection: 'row'}}>
+          <TextInput
+            style={{height: 40, width: 500}}
+            onChangeText={(text) => this.setState({word: text})}
+            placeholder="Type a word here to find top 10 most similar words"
+          />
+          <Button 
+            onPress={this.handleSubmit2} 
+            title="Submit"
+          />
+        </View>
+        <Text style={styles.text}> 
+            {this.state.tenwords}
+        </Text>
+
       </View>
+
+
     );
   }
 }

@@ -26,11 +26,7 @@ class ExtractArticle(Resource):
         return {"article": article}
 
 
-class WordEmbedding(Resource):
-
-    def get(self):
-        word = request.form['vocabulary']
-        return DATA["vocabularies"].get_most_similar_words(word, 10)
+class Training(Resource):
 
     def post(self):
         vocabs = Vocabularies(DATA["article"])
@@ -38,8 +34,16 @@ class WordEmbedding(Resource):
         DATA["vocabularies"] = vocabs
 
 
+class WordEmbedding(Resource):
+
+    def post(self):
+        word = request.form['word']
+        print(DATA["vocabularies"].get_most_similar_words(word, 10))
+        return {"words": DATA["vocabularies"].get_most_similar_words(word, 10)}
+
 # api.add_resource(WordEmbedding, '/<string:article>')
 api.add_resource(ExtractArticle, '/article')
+api.add_resource(Training, '/train')
 api.add_resource(WordEmbedding, '/words')
 
 if __name__ == '__main__':
