@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Image, StyleSheet, Text, View, TextInput} from "react-native";
 import queryString from 'query-string';
+import ViewMoreText from 'react-native-view-more-text';
 
 const Link = props => (
   <Text
@@ -39,6 +40,18 @@ class App extends Component {
     }); 
   }
 
+  renderViewMore(onPress){
+    return(
+      <Text onPress={onPress}>View more</Text>
+    )
+  }
+
+  renderViewLess(onPress){
+    return(
+      <Text onPress={onPress}>View less</Text>
+    )
+  }
+
   render() {
     return (
       <View style={styles.app}>
@@ -71,11 +84,17 @@ class App extends Component {
                {this.state.text}
             </Text>
         </View> */}
-        <View>
+        <ViewMoreText
+          numberOfLines={3}
+          renderViewMore={this.renderViewMore}
+          renderViewLess={this.renderViewLess}
+          textStyle={{textAlign: 'center'}}
+        >
           <Text style={styles.small_text}> 
             {this.state.article}
           </Text>
-        </View>
+        </ViewMoreText>
+
         <Text style={styles.text}>
           Extracted Article from {" "}
           <Link href={this.state.text}>
